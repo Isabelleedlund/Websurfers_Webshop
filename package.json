@@ -4,11 +4,15 @@
   "description": "A webshop build with node, express and ejs",
   "main": "index.js",
   "directories": {
-    "test": "test"
+    "test": "test",
+    "engines": {
+      "node": "12.14.1"
+    }
   },
   "scripts": {
     "test": "mocha",
-    "start": "nodemon index.js & node-sass -w sass -o public",
+    "start": "node index.js",
+    "sass": "node-sass -w sass -o public",
     "scss": "node-sass --watch sass -o public"
   },
   "repository": {
@@ -40,6 +44,7 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "cookie-parser": "^1.4.5",
+    "dotenv": "^8.2.0",
     "mocha": "^7.1.1",
     "nodemon": "^2.0.2",
     "supertest": "^4.0.2"

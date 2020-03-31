@@ -31,22 +31,32 @@
         </header>
 
         <div class="row">
+            <% user.checkout.forEach((product) => {%>
+
             <div class="col-sm-12 col-md-12 col-lg-6 orderinformationborder">
                 <div class="row orderinformation">
+                    <% if(product.productId) {%>
                     <div class="col-8">
-                        <span class="ordername">Surf and Turf in Portugal</span>
-                        <span>4 weeks</span>
+                        <span class="ordername"><%= product.productId.title %></span>
                     </div>
                     <div class="col-4 orderprice ml-auto">
-                        8292
+                        <%= product.productId.price %>
                         <span class="orderpricesek">
                             SEK
                         </span>
                     </div>
+                    <div class="col-10">
+                        <span class="country"><%= product.productId.country %></span>
+                    </div>
+                        <div class="col-2">
+                            <a href="/deletecheckout/<%=product.productId._id%>"><img src="/images/delete.svg" alt="delete"
+                            class="img-fluid img-thumbnail smallimg"></a>
+                    </div>
                 </div>
             </div>
+            <%};%> 
         </div>
-
+        <%});%> 
         <div class="row">
             <div class="col-sm-12 col-md-12 col-lg-6 informationsection">
                 <div class="row">
@@ -126,8 +136,8 @@
                 </form>
                 <div class="row paymentlogos">
                     <div class="col-12">
-                        <img src="./images/mastercard-log.svg" alt="mastercard-logo" class="paymentlogo">
-                        <img src="./images/visa-logo.svg" alt="visa-logo" class="paymentlogo">
+                        <img src="./images/mastercard.svg" alt="mastercard-logo" class="paymentlogo">
+                        <img src="./images/visa.svg" alt="visa-logo" class="paymentlogo">
                     </div>
                 </div>
             </div>

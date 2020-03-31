@@ -37,7 +37,7 @@
                         <a href="/signup" class="nav-item">SIGN UP</a>
                     </div>
                     <div class="col-2 col-md-5">
-                        <a href="#" class="basketwrapper">
+                        <a href="/checkout" class="basketwrapper">
                             <img src="../images/cart.svg" alt="basket" class="basketlogo">
                         </a>
                     </div>
@@ -92,10 +92,13 @@
                                         <p><%= course.description %></p>
                                     </div>
                                     <div class="col-sm-12 col-md-4">
-                                        <button type="button" class="buttonblue">Book</button>
+                                        <a href="/checkout/<%=course._id%>">
+                                            <button type="button" class="buttonblue">Book</button>
+                                        </a>
                                     </div>
                                     <div class="col-sm-12 col-md-8">
-                                        <a href="/wishlist/<%=course._id%>"><img src="/images/handnotclicked.svg" class="smallimg"></a>
+                                        <a href="/wishlist/<%=course._id%>"><img src="/images/handnotclicked.svg"
+                                                class="smallimg"></a>
                                         <span>Add course to wishlist!</span>
                                     </div>
                                 </div>
