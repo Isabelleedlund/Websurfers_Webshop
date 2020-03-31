@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>WEB SURFERS</title>
+    <title>checkout</title>
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
         integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous">
     </script>
@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="main.css">
+    <script src="https://js.stripe.com/v3/"></script>
 </head>
 
 <body>
@@ -103,8 +104,19 @@
                         <h5 class="title">PAYMENT</h5>
                     </div>
                 </div>
-                <form>
-                    <div class="row">
+             
+                    <form id="payment-form">
+                        <div id="card-element">
+                          <!-- Elements will create input elements here -->
+                        </div>
+                      
+                        <!-- We'll put the error messages in this element -->
+                        <div id="card-errors" role="alert"></div>
+                      
+                        <button id="submit">Pay</button>
+                      </form>
+                      <!-- <form> -->
+                    <!-- <div class="row">
                         <div class="col-12">
                             <input type="text" class="inputlongco" id="cardno" name="cardno" placeholder="Card No."
                                 width="500px">
@@ -127,13 +139,13 @@
                                 accusantium doloremque laudantium, totam rem iam,
                             </span>
                         </div>
-                    </div>
-                    <div class="row">
+                    </div> -->
+                    <!-- <div class="row">
                         <div class="col-12 buttondiv">
                             <button type="submit" class="buttonblue">PAY</button>
                         </div>
-                    </div>
-                </form>
+                    </div> -->
+                <!-- </form> -->
                 <div class="row paymentlogos">
                     <div class="col-12">
                         <img src="./images/mastercard.svg" alt="mastercard-logo" class="paymentlogo">

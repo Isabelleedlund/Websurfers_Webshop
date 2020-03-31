@@ -9,16 +9,19 @@
   "engines": {
     "node": "12.14.1"
   },
+
   "scripts": {
     "test": "mocha",
     "start": "node index.js",
     "sass": "node-sass -w sass -o public",
     "scss": "node-sass --watch sass -o public"
   },
+
   "repository": {
     "type": "git",
     "url": "git+https://github.com/stefanhallberg123/webshop.git"
   },
+  
   "author": "Stefan Hallberg, Emma Teo, Isabelle Edlund, Josefin Ljung, Julia Nilsson",
   "license": "ISC",
   "bugs": {
@@ -40,6 +43,7 @@
     "node-sass-middleware": "^0.11.0",
     "nodemailer": "^6.4.5",
     "nodemailer-sendgrid-transport": "^0.2.0",
+    "stripe": "^8.38.0",
     "views": "^1.0.2"
   },
   "devDependencies": {
