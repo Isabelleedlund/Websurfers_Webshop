@@ -9,15 +9,15 @@ const crypto                = require("crypto");
 const verifyToken           = require("./verifyToken");
 const sendGridTransport     = require("nodemailer-sendgrid-transport");
 const config                = require("../config/config");
-// const env                   = require("dotenv").config({ path: "./.env" });
-// const stripe                = require("stripe")(process.env.STRIPE_SECRET_KEY);
+const env                   = require("dotenv").config({ path: "./.env" });
+const stripe                = require("stripe")(process.env.STRIPE_PUBLISHABLE_KEY);
 
 // middleware  \\
 const router = express();
-
+//Api-nyckeln för SendGrid är rätt men SendGrid vill inte accepterat vår nyckel. Har även skapat flera olika nycklar men dessa blev inte godkända. Alla i gruppen har testat men koderna fungerar ej. Testat med flera olika sätt. Algoritmerna är rätt. 
 const transport = nodemailer.createTransport(sendGridTransport({
     auth: {
-        ap_key: config.mail
+        api_user: config.mail,
     }
 }));
 
@@ -28,7 +28,7 @@ router.use(express.static("public"));
 
 // Variables \\
 const userROUTE = {
-    main: "/", 
+    main: "/",
     course: "/course",
     checkout: "/checkout",
     checkoutid: "/checkout/:id",
@@ -51,7 +51,7 @@ const userROUTE = {
 };
 
 const userVIEW = {
-    main: "firstpagevideo", 
+    main: "firstpagevideo",
     course: "course",
     checkout: "checkout",
     login: "login",
@@ -115,26 +115,24 @@ router.get(userROUTE.deletecheckout, verifyToken, async (req, res) => {
     res.redirect(userROUTE.course);
 });
 
-// // Stripe \\
-// const calculateOrderAmount = items => {
-//     // Replace this constant with a calculation of the order's amount
-//     // Calculate the order total on the server to prevent
-//     // people from directly manipulating the amount on the client
-//     return 1400;
-// };
-  
-// app.post(userROUTE.checkout, async (req, res) => {
-//     const { items, currency } = req.body;
-//     // Create a PaymentIntent with the order amount and currency
-//     const paymentIntent = await stripe.paymentIntents.create({
-//         amount: calculateOrderAmount(items),
-//         currency: currency
-//     });
+// RAKIB STRIPE \\
+// router.get(userROUTE.checkout, verifyToken, async (req, res) => {
+//     const user = await (await User.findOne({_id: req.body._id})).populate("checkout.productId");
 
-// // Send publishable key and PaymentIntent details to client
-//     res.send({
-//     publishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
-//     clientSecret: paymentIntent.client_secret
+//     return stripe.checkout.sessions.create({
+//         payment_method_types: ["card"],
+//         line_items: user.wishlist.map((product) => {
+//             return {
+//                 name: product.productId.name,
+//                 amount: product.productId.price*100,
+//                 quantity: 1, 
+//                 currency: "sek",
+//             }
+//         }),
+//         success_url: req.protocol + "://" + req.get("Host") + "/",
+//         cancel_url: "http://localhost:8003/course"
+//     }).then( (session) => {
+//         res.render(userVIEW.checkout, {user, sessionId:session.id})
 //     });
 // });
 
@@ -149,7 +147,7 @@ router.post(userROUTE.signup, async (req, res) => {
     const salt = await bcrypt.genSaltSync(10);
     const hashPassword = await bcrypt.hash(req.body.password, salt)
     const signUpuser = await User.findOne({ email: req.body.email })
-    
+
     if (signUpuser) return res.render(userVIEW.signup, { errorMessage: "Email already exist" })
     const user = await new User({
         email: req.body.email,
@@ -179,7 +177,7 @@ router.post(userROUTE.login, async (req, res) => {
     if (!user) return res.render(userVIEW.login, { errorMessage: "Email does not exist" })
     const validUser = await bcrypt.compare(req.body.loginpassword, user.password)
     if (!validUser) return res.render(userVIEW.login, { errorMessage: "Wrong password" })
-  
+
     jwt.sign({ user }, "secretKey", (err, token) => {
         if (err) return res.redirect(userROUTE.login);
         if (token) {
@@ -205,22 +203,22 @@ router.get(userROUTE.welcome, (req, res) => {
 
 // customer wishlist \\
 router.get(userROUTE.wishlist, verifyToken, async (req, res) => {
-    const user = await User.findOne({_id:req.body.user._id}).populate("wishlist.productId")
+    const user = await User.findOne({ _id: req.body.user._id }).populate("wishlist.productId")
     console.log(user)
-    res.render(userVIEW.wishlist, {user});
+    res.render(userVIEW.wishlist, { user });
 });
 
 router.get(userROUTE.wishlistid, verifyToken, async (req, res) => {
-    const product = await productItem.findOne({_id:req.params.id})
-    const user = await User.findOne({_id:req.body.user._id})
+    const product = await productItem.findOne({ _id: req.params.id })
+    const user = await User.findOne({ _id: req.body.user._id })
     console.log(req.body.user)
     await user.addToWishlist(product)
     res.redirect(userROUTE.wishlist);
 });
 
 router.get(userROUTE.deletewishlist, verifyToken, async (req, res) => {
-    const user = await User.findOne({_id:req.body.user._id})
-    
+    const user = await User.findOne({ _id: req.body.user._id })
+
     user.removeFromList(req.params.id)
     res.redirect(userROUTE.wishlist);
 });
@@ -249,18 +247,12 @@ router.get(userROUTE.orders, (req, res) => {
     res.render(userVIEW.orders);
 });
 
-router.post(userROUTE.orders, async (req, res) => {
-
-});
 
 // customer thankyou \\
 router.get(userROUTE.thankyou, (req, res) => {
     res.render(userVIEW.thankyou);
 });
 
-router.post(userROUTE.thankyou, async (req, res) => {
-
-});
 
 // customer reset password
 // skickas mejl med länk för att återställa lösenordet
@@ -269,7 +261,7 @@ router.get(userROUTE.reset, (req, res) => {
 });
 
 router.post(userROUTE.reset, async (req, res) => {
-    const user = await User.findOne({ email: req.body.resetMail })
+    const user = await User.findOne({ email: req.body.email })
     if (!user) return res.redirect(userROUTE.signup)
 
     crypto.randomBytes(32, async (err, token) => {
@@ -284,7 +276,7 @@ router.post(userROUTE.reset, async (req, res) => {
             to: user.email,
             from: "edlund.isabelle@gmail.com",
             subject: "Reset password",
-            html: `<h1> Reset Password Link: http://localhost:8005/reset/${resetToken} </h1>`
+            html: `<h1> Reset Password Link: http://localhost:8003/reset/${resetToken} </h1>`
         })
         res.redirect(userROUTE.login)
     })

@@ -1,0 +1,10 @@
+
+    @include tablet {
+        padding-top: 30px;
+        padding-left: 50px;
+    }
+
+    @include desktop {
+        padding-top: 30px;
+        padding-left: 90px;
+    }

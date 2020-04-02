@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="main.css">
-    <script src="https://js.stripe.com/v3/"></script>
+
 </head>
 
 <body>
@@ -30,7 +30,6 @@
                 </div>
             </div>
         </header>
-
         <div class="row">
             <% user.checkout.forEach((product) => {%>
 
@@ -49,15 +48,15 @@
                     <div class="col-10">
                         <span class="country"><%= product.productId.country %></span>
                     </div>
-                        <div class="col-2">
-                            <a href="/deletecheckout/<%=product.productId._id%>"><img src="/images/delete.svg" alt="delete"
-                            class="img-fluid img-thumbnail smallimg"></a>
+                    <div class="col-2">
+                        <a href="/deletecheckout/<%=product.productId._id%>"><img src="/images/delete.svg" alt="delete"
+                                class="img-fluid img-thumbnail smallimg"></a>
                     </div>
                 </div>
             </div>
-            <%};%> 
+            <%};%>
         </div>
-        <%});%> 
+        <%});%>
         <div class="row">
             <div class="col-sm-12 col-md-12 col-lg-6 informationsection">
                 <div class="row">
@@ -104,17 +103,15 @@
                         <h5 class="title">PAYMENT</h5>
                     </div>
                 </div>
-                    <!-- <form id="payment-form">
-                        <div id="card-element" class="base"> -->
-                          <!-- Elements will create input elements here -->
-                        <!-- </div> -->
-                      
-                        <!-- We'll put the error messages in this element -->
-                        <!-- <div id="card-errors" role="alert" class="errorMessage"></div>
-                      
-                        <button id="submit" class="buttonblue">Pay</button>
-                    </form> -->
-                      <form>
+                <!-- <form id="payment-form">
+        <div id="card-element" class="base"> -->
+                <!-- Elements will create input elements here -->
+                <!-- </div> -->
+                <!-- We'll put the error messages in this element -->
+                <!-- <div id="card-errors" role="alert" class="errorMessage"></div>
+        <button id="submit" class="buttonblue">Pay</button>
+        </form> -->
+                <form>
                     <div class="row">
                         <div class="col-12">
                             <input type="text" class="inputlongco" id="cardno" name="cardno" placeholder="Card No."
@@ -141,7 +138,7 @@
                     </div>
                     <div class="row">
                         <div class="col-12 buttondiv">
-                            <button type="submit" class="buttonblue">PAY</button>
+                            <button type="submit" class="buttonblue" id="paybtn">PAY</button>
                         </div>
                     </div>
                 </form>
@@ -154,6 +151,27 @@
             </div>
         </div>
     </div>
+
+
+
+<!-- 
+
+    <form action="" method="post">
+        <% user.wishlist.forEach(product) => { %>
+        <div><%= product.productId.title %> </div>
+        <div><%=product.productId.price %> </div>
+        })
+    </form>
+
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        let stripe = Stripe("pk_test_YdqKsq7KM50ZZyi98Os90Y3A000xvgdY8x");
+        document.querySelector("#paybtn").addEventListener("click", () => {
+            stripe.redirectToCheckout({
+                sessionId: "<%=sessionId%>"
+            });
+        });
+    </script> -->
 </body>
 
 </html>

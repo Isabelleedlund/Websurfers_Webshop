@@ -28,7 +28,11 @@ const userSchema = new Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: "Product"
         }
-    }]
+    }],
+    // quantity: {
+    //     type: Number,
+    //     required: true
+    // }
 });
 
 // Add to Checkout \\
@@ -80,7 +84,6 @@ userSchema.methods.removeFromList = function (productId) {
     this.wishlist = remainingWishlistProducts;
     return this.save()
 };
-
 
 const User = mongoose.model("User", userSchema)
 

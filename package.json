@@ -10,7 +10,7 @@
     "node": "12.14.1"
   },
   "scripts": {
-    "test": "mocha",
+    "test": "jest --watchAll",
     "start": "node index.js",
     "sass": "node-sass -w sass -o public",
     "scss": "node-sass --watch sass -o public"
