@@ -9,19 +9,16 @@
   "engines": {
     "node": "12.14.1"
   },
-
   "scripts": {
     "test": "mocha",
     "start": "node index.js",
     "sass": "node-sass -w sass -o public",
     "scss": "node-sass --watch sass -o public"
   },
-
   "repository": {
     "type": "git",
     "url": "git+https://github.com/stefanhallberg123/webshop.git"
   },
-  
   "author": "Stefan Hallberg, Emma Teo, Isabelle Edlund, Josefin Ljung, Julia Nilsson",
   "license": "ISC",
   "bugs": {
@@ -31,6 +28,7 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
+    "brew": "0.0.8",
     "cookie-parser": "^1.4.5",
     "ejs": "^3.0.1",
     "express": "^4.17.1",
@@ -49,6 +47,7 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "dotenv": "^8.2.0",
+    "jest": "^25.2.4",
     "mocha": "^7.1.1",
     "nodemon": "^2.0.2",
     "supertest": "^4.0.2"
