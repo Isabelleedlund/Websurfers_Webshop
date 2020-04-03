@@ -25,7 +25,6 @@ router.use(bodyParser.urlencoded({ extended: false }))
 router.use(express.urlencoded({ extended: true }));
 router.set("view engine", "ejs");
 router.use(express.static("public"));
-router.use(express.static("public/images"));
 
 // Variables \\
 const userROUTE = {
