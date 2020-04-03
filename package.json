@@ -42,11 +42,11 @@
     "nodemailer": "^6.4.5",
     "nodemailer-sendgrid-transport": "^0.2.0",
     "stripe": "^8.38.0",
+    "dotenv": "^8.2.0",
     "views": "^1.0.2"
   },
   "devDependencies": {
     "chai": "^4.2.0",
-    "dotenv": "^8.2.0",
     "jest": "^25.2.4",
     "mocha": "^7.1.1",
     "nodemon": "^2.0.2",

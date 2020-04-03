@@ -103,14 +103,6 @@
                         <h5 class="title">PAYMENT</h5>
                     </div>
                 </div>
-                <!-- <form id="payment-form">
-        <div id="card-element" class="base"> -->
-                <!-- Elements will create input elements here -->
-                <!-- </div> -->
-                <!-- We'll put the error messages in this element -->
-                <!-- <div id="card-errors" role="alert" class="errorMessage"></div>
-        <button id="submit" class="buttonblue">Pay</button>
-        </form> -->
                 <form>
                     <div class="row">
                         <div class="col-12">
@@ -136,12 +128,13 @@
                             </span>
                         </div>
                     </div>
+                      
                     <div class="row">
                         <div class="col-12 buttondiv">
                             <button type="submit" class="buttonblue" id="paybtn">PAY</button>
                         </div>
                     </div>
-                </form>
+              
                 <div class="row paymentlogos">
                     <div class="col-12">
                         <img src="./images/mastercard.svg" alt="mastercard-logo" class="paymentlogo">
@@ -151,27 +144,14 @@
             </div>
         </div>
     </div>
-
-
-
-<!-- 
-
-    <form action="" method="post">
-        <% user.wishlist.forEach(product) => { %>
-        <div><%= product.productId.title %> </div>
-        <div><%=product.productId.price %> </div>
-        })
-    </form>
-
     <script src="https://js.stripe.com/v3/"></script>
     <script>
-        let stripe = Stripe("pk_test_YdqKsq7KM50ZZyi98Os90Y3A000xvgdY8x");
+        var stripe = Stripe("pk_test_YdqKsq7KM50ZZyi98Os90Y3A000xvgdY8x");
         document.querySelector("#paybtn").addEventListener("click", () => {
             stripe.redirectToCheckout({
                 sessionId: "<%=sessionId%>"
             });
         });
-    </script> -->
+    </script>
 </body>
-
 </html>

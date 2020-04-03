@@ -9,8 +9,8 @@ const crypto                = require("crypto");
 const verifyToken           = require("./verifyToken");
 const sendGridTransport     = require("nodemailer-sendgrid-transport");
 const config                = require("../config/config");
-const env                   = require("dotenv").config({ path: "./.env" });
-const stripe                = require("stripe")(process.env.STRIPE_PUBLISHABLE_KEY);
+if (process.env.NODE_ENV !== 'production') require('dotenv').config({ path: "./.env" });
+const stripe                = require("stripe")(process.env.client_secret);
 
 // middleware  \\
 const router = express();
@@ -93,11 +93,27 @@ router.get(userROUTE.course, async (req, res) => {
     });
 });
 
-// Customer Checkout \\
+// Customer Checkout \\ 
+// RAKIB GET STRIPE \\
 router.get(userROUTE.checkout, verifyToken, async (req, res) => {
-    const user = await User.findOne({_id:req.body.user._id}).populate("checkout.productId")
-    console.log(user)
-    res.render(userVIEW.checkout, {user});
+    console.log(req.body)
+    const user = await User.findOne({_id: req.body.user._id}).populate("checkout.productId");
+    console.log(user, "hej");
+    return stripe.checkout.sessions.create({
+        payment_method_types: ["card"],
+        line_items: user.checkout.map((product) => {
+            return {
+                name: product.productId.title,
+                amount: product.productId.price*100, // *100 är för att det inte ska vara öre
+                quantity: 1, 
+                currency: "sek",
+            }
+        }),
+        success_url: req.protocol + "://" + req.get("Host") + "/",
+        cancel_url: "http://localhost:8003/course"
+    }).then( (session) => {
+        res.render(userVIEW.checkout, {user, sessionId:session.id})
+    });
 });
 
 router.get(userROUTE.checkoutid, verifyToken, async (req, res) => {
@@ -115,30 +131,9 @@ router.get(userROUTE.deletecheckout, verifyToken, async (req, res) => {
     res.redirect(userROUTE.course);
 });
 
-// RAKIB STRIPE \\
-// router.get(userROUTE.checkout, verifyToken, async (req, res) => {
-//     const user = await (await User.findOne({_id: req.body._id})).populate("checkout.productId");
-
-//     return stripe.checkout.sessions.create({
-//         payment_method_types: ["card"],
-//         line_items: user.wishlist.map((product) => {
-//             return {
-//                 name: product.productId.name,
-//                 amount: product.productId.price*100,
-//                 quantity: 1, 
-//                 currency: "sek",
-//             }
-//         }),
-//         success_url: req.protocol + "://" + req.get("Host") + "/",
-//         cancel_url: "http://localhost:8003/course"
-//     }).then( (session) => {
-//         res.render(userVIEW.checkout, {user, sessionId:session.id})
-//     });
-// });
-
 // customer signup \\
 router.get(userROUTE.signup, async (req, res) => {
-    const errorMessage = ""
+    const errorMessage = "error"
     const findUser = await User.find();
     res.render(userVIEW.signup, { findUser, errorMessage });
 });
