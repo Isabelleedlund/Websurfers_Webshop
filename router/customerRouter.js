@@ -74,6 +74,29 @@ router.get(userROUTE.main, (req, res) => {
 });
 
 // customer course \\
+
+router.get(userROUTE.course, verifyToken, async (req, res) => {
+    console.log(req.body)
+    const user = await User.findOne({_id: req.body.user._id}).populate("checkout.productId");
+    console.log(user, "hej");
+    return stripe.checkout.sessions.create({
+        payment_method_types: ["card"],
+        line_items: user.checkout.map((product) => {
+            return {
+                name: product.productId.title,
+                amount: product.productId.price*100, // *100 är för att det inte ska vara öre
+                quantity: 1, 
+                currency: "sek",
+            }
+        }),
+        success_url: req.protocol + "://" + req.get("Host") + "/",
+        cancel_url: "http://localhost:8003/course"
+    }).then( (session) => {
+        res.render(userVIEW.course, {user, sessionId:session.id})
+    });
+});
+
+
 router.get(userROUTE.course, async (req, res) => {
     const currentPage = req.query.page || 1;
     const productPerPage = 1;
@@ -93,28 +116,27 @@ router.get(userROUTE.course, async (req, res) => {
     });
 });
 
-// Customer Checkout \\ 
-// RAKIB GET STRIPE \\
-router.get(userROUTE.checkout, verifyToken, async (req, res) => {
-    console.log(req.body)
-    const user = await User.findOne({_id: req.body.user._id}).populate("checkout.productId");
-    console.log(user, "hej");
-    return stripe.checkout.sessions.create({
-        payment_method_types: ["card"],
-        line_items: user.checkout.map((product) => {
-            return {
-                name: product.productId.title,
-                amount: product.productId.price*100, // *100 är för att det inte ska vara öre
-                quantity: 1, 
-                currency: "sek",
-            }
-        }),
-        success_url: req.protocol + "://" + req.get("Host") + "/",
-        cancel_url: "http://localhost:8003/course"
-    }).then( (session) => {
-        res.render(userVIEW.checkout, {user, sessionId:session.id})
-    });
-});
+// Customer Checkout PAGE - Has been changed to the course page. \\ 
+// router.get(userROUTE.checkout, verifyToken, async (req, res) => {
+//     console.log(req.body)
+//     const user = await User.findOne({_id: req.body.user._id}).populate("checkout.productId");
+//     console.log(user, "hej");
+//     return stripe.checkout.sessions.create({
+//         payment_method_types: ["card"],
+//         line_items: user.checkout.map((product) => {
+//             return {
+//                 name: product.productId.title,
+//                 amount: product.productId.price*100, // *100 är för att det inte ska vara öre
+//                 quantity: 1, 
+//                 currency: "sek",
+//             }
+//         }),
+//         success_url: req.protocol + "://" + req.get("Host") + "/",
+//         cancel_url: "http://localhost:8003/course"
+//     }).then( (session) => {
+//         res.render(userVIEW.checkout, {user, sessionId:session.id})
+//     });
+// });
 
 router.get(userROUTE.checkoutid, verifyToken, async (req, res) => {
     const product = await productItem.findOne({_id:req.params.id})
