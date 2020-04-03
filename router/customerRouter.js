@@ -73,11 +73,14 @@ router.get(userROUTE.main, (req, res) => {
     res.render(userVIEW.main);
 });
 
-router.get(userROUTE.course, verifyToken, async (req, res) => {
+// customer course \\
+router.get(userROUTE.course, async (req, res) => {
     const currentPage = req.query.page || 1;
     const productPerPage = 1;
     const sortByDate = req.query.sort;
+
     const allCourses = await productItem.find();
+
     const oneCourse = await productItem.find().sort({
         date: sortByDate
     }).skip((currentPage - 1) * productPerPage).limit(productPerPage)
@@ -88,47 +91,7 @@ router.get(userROUTE.course, verifyToken, async (req, res) => {
         pagesCount,
         currentPage
     });
-
-    console.log(req.body)
-    const user = await User.findOne({_id: req.body.user._id}).populate("checkout.productId");
-    console.log(user, "hej");
-    return stripe.checkout.sessions.create({
-        payment_method_types: ["card"],
-        line_items: user.checkout.map((product) => {
-            return {
-                name: product.productId.title,
-                amount: product.productId.price*100, // *100 är för att det inte ska vara öre
-                quantity: 1, 
-                currency: "sek",
-            }
-        }),
-        success_url: req.protocol + "://" + req.get("Host") + "/",
-        cancel_url: "http://localhost:8003/course"
-    }).then( (session) => {
-        res.render(userVIEW.course, {user, sessionId:session.id})
-    });
 });
-
-
-// customer course \\
-// router.get(userROUTE.course, async (req, res) => {
-//     const currentPage = req.query.page || 1;
-//     const productPerPage = 1;
-//     const sortByDate = req.query.sort;
-
-//     const allCourses = await productItem.find();
-
-//     const oneCourse = await productItem.find().sort({
-//         date: sortByDate
-//     }).skip((currentPage - 1) * productPerPage).limit(productPerPage)
-//     const pagesCount = Math.ceil(allCourses.length / productPerPage)
-
-//     res.render(userVIEW.course, {
-//         oneCourse,
-//         pagesCount,
-//         currentPage
-//     });
-// });
 
 // Customer Checkout \\ 
 router.get(userROUTE.checkout, verifyToken, async (req, res) => {
